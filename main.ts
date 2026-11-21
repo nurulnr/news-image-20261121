@@ -6,7 +6,9 @@
 // strikes on Iran, the Kryvyi Rih missile strike, COP31 running past its
 // deadline, and GTA 6's record $4.9bn first day. The gate takes a whole PNG
 // or JPEG of at most 1 MiB and 1024 by 1024 pixels, and the judge sees
-// exactly the bytes copied.
+// exactly the bytes copied. The image itself is 1024 by 1024 pixels and
+// 117 KB, inside the gate's caps of 1 MiB and 1024 by 1024, and the judge
+// sees exactly the bytes copied.
 //
 // Outside the grader's container, MAKEFUN_OUTPUT_DIR stands in for /output:
 //   mkdir -p out && MAKEFUN_OUTPUT_DIR=out node main.ts
