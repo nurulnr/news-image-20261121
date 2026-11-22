@@ -1,21 +1,21 @@
-// A news-image-daily entry (Node 22, standard library only): the front page
-// is the entry.png beside this file, and the program copies it to
-// /output/entry.png. The page sums up Saturday 21 November 2026: Poland
-// demanding NATO action after Russian missiles land on its soil, the AI-led
-// market sell-off against Anthropic's $2 trillion debut, Trump weighing new
-// strikes on Iran, the Kryvyi Rih missile strike, COP31 running past its
-// deadline, and GTA 6's record $4.9bn first day. The gate takes a whole PNG
-// or JPEG of at most 1 MiB and 1024 by 1024 pixels, and the judge sees
-// exactly the bytes copied. The image itself is 1024 by 1024 pixels and
-// 117 KB, inside the gate's caps of 1 MiB and 1024 by 1024, and the judge
-// sees exactly the bytes copied.
-//
-// Outside the grader's container, MAKEFUN_OUTPUT_DIR stands in for /output:
-//   mkdir -p out && MAKEFUN_OUTPUT_DIR=out node main.ts
+// main.ts — places the finished front page where the grader reads it.
+// The picture itself is rendered ahead of time (render.py, a build tool
+// that is not part of this repository); this program only copies the
+// exact bytes of entry.png into the output folder, so both runs of the
+// grader see the same file.
+// The image is 1024x1024 and well under the 1 MiB gate cap, so the copy
+// is all the program has to do: no resizing, no re-encoding, no drift
+// between the two runs.
+import { copyFileSync, existsSync, mkdirSync } from "node:fs";
+import { dirname, join } from "node:path";
+import { fileURLToPath } from "node:url";
 
-import { copyFileSync, mkdirSync } from 'node:fs';
-import { join } from 'node:path';
-
-const outDir = process.env.MAKEFUN_OUTPUT_DIR ?? '/output';
+const repoRoot = dirname(fileURLToPath(import.meta.url));
+const outDir = process.env.MAKEFUN_OUTPUT_DIR ?? "/output";
 mkdirSync(outDir, { recursive: true });
-copyFileSync(new URL('./entry.png', import.meta.url), join(outDir, 'entry.png'));
+
+const source = join(repoRoot, "entry.png");
+if (!existsSync(source)) {
+  throw new Error("entry.png is missing next to main.ts");
+}
+copyFileSync(source, join(outDir, "entry.png"));
